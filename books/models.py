@@ -15,6 +15,12 @@ class Book(models.Model):
     created = models.DateField(auto_now_add=True)
     date_completed = models.DateField(null=True, blank=True, default=None)
     user =  models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    # Nuevos campos para Milestone 1
+    cover = models.ImageField(upload_to='covers/', null=True, blank=True)
+    pdf_file = models.FileField(upload_to='pdfs/', null=True, blank=True)
+    google_books_id = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -33,6 +39,11 @@ class Book(models.Model):
             tabla.append((dias, paginas_por_dia))
         return tabla
 
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.pages_read > self.pages_total:
+            raise ValidationError("Las páginas leídas no pueden ser mayores que el total de páginas.")
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_most_pages_read = models.DateField(null=True, blank=True)
@@ -48,16 +59,10 @@ class Profile(models.Model):
         dias = timezone.now().day
         paginas_por_dia = round(self.pages_this_month / dias)
         return paginas_por_dia
-    
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
         instance.profile.save()
-    
-
-def clean(self):
-    from django.core.exceptions import ValidationError
-    if self.pages_read > self.pages_total:
-        raise ValidationError("Las páginas leídas no pueden ser mayores que el total de páginas.")

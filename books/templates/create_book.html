@@ -7,7 +7,7 @@
         <h1>Create Book</h1>
     </div>
     <div class = "p-2 rounded formOutline" style=" background-color:#FFFFFF">
-        <form action="/books/create/" method="POST">
+        <form action="/books/create/" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{error}}
             {{form.as_p}}

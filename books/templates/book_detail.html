@@ -7,32 +7,66 @@
         <h1>{{book.title}}</h1>
         {{error}}
     </div>
-        <form method="POST">
-            {% csrf_token %}
-            {{form.as_p}}
+    <div class="row w-100">
+        <!-- Columna de Detalles y Edición -->
+        <div class="col-md-6">
+            {% if book.cover %}
+                <div class="text-center mb-3">
+                    <img src="{{ book.cover.url }}" alt="Portada de {{ book.title }}" style="max-height: 250px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                </div>
+            {% endif %}
+            {% if book.description %}
+                <div class="mb-3">
+                    <strong>Descripción:</strong>
+                    <p class="text-muted" style="font-size: 0.9rem;">{{ book.description }}</p>
+                </div>
+            {% endif %}
 
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">Dias de lectura</th>
-                    <th scope="col">Paginas a leer por dia</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for dia, paginas in book.pages_for_day %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
 
+                <table class="table table-bordered mt-3">
+                    <thead>
                     <tr>
-                        <td>{{ dia }}</td>
-                        <td>{{ paginas }}<br></td>
+                        <th scope="col">Dias de lectura</th>
+                        <th scope="col">Paginas a leer por dia</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for dia, paginas in book.pages_for_day %}
+                        <tr>
+                            <td>{{ dia }}</td>
+                            <td>{{ paginas }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
 
-            <button type="submit" class="updateButtonColor btn btn-secondary btn-block buttonMargin">Update Book</button>
-        </form>
+                <button type="submit" class="updateButtonColor btn btn-secondary btn-block buttonMargin">Update Book</button>
+            </form>
+        </div>
 
-        <form action="{% url 'complete_book' book.id %}" method="POST">
+        <!-- Columna del Visor PDF -->
+        <div class="col-md-6">
+            {% if book.pdf_file %}
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Visor PDF</h5>
+                    </div>
+                    <div class="card-body p-0" style="height: 600px;">
+                        <iframe src="{{ book.pdf_file.url }}" width="100%" height="100%" style="border: none;">
+                            Este navegador no soporta PDFs. <a href="{{ book.pdf_file.url }}">Descargar el PDF</a>.
+                        </iframe>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info mt-4" role="alert">
+                    No has subido un archivo PDF para este libro aún.
+                </div>
+            {% endif %}
+        </div>
+    </div>        <form action="{% url 'complete_book' book.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="completeButtonColor btn btn-secondary btn-block buttonMargin">Mark as Complete</button>
         </form>

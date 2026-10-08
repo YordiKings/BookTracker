@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from books import views
 
 urlpatterns = [
@@ -30,4 +32,4 @@ urlpatterns = [
     path('books/<int:book_id>/delete', views.delete_book, name='delete_book'),
     path('logout/', views.signout, name='signout'),
     path('signin/', views.signin, name='signin'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
