@@ -8,7 +8,7 @@ from .models import Book
 class BookForm(ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'autor', 'goal', 'pages_read', 'pages_total']
+        fields = ['title', 'autor', 'goal', 'pages_read', 'pages_total', 'cover', 'pdf_file']
         widgets = {
             'goal': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -18,7 +18,9 @@ class BookForm(ModelForm):
         self.fields['autor'].widget.attrs['class'] = 'form-control'
         self.fields['goal'].widget.attrs['class'] = 'form-control'  
         self.fields['pages_read'].widget.attrs['class'] = 'form-control'
-        self.fields['pages_total'].widget.attrs['class'] = 'form-control'   
+        self.fields['pages_total'].widget.attrs['class'] = 'form-control'
+        self.fields['cover'].widget.attrs['class'] = 'form-control'
+        self.fields['pdf_file'].widget.attrs['class'] = 'form-control'
         
 class SignUpForm(UserCreationForm):
     class Meta:

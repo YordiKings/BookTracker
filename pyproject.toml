@@ -1,0 +1,22 @@
+[project]
+name = "booktracker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "R-IGO-PROJECT", email = "pruebadeproyectos1@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "django>=6.1.1",
+    "pillow>=12.3.0",
+    "pytest>=9.1.1",
+    "pytest-django>=4.14.0",
+    "requests>=2.34.2",
+]
+
+[project.scripts]
+booktracker = "booktracker:main"
+
+[tool.uv]
+package = false

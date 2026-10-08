@@ -17,7 +17,10 @@
                     <div class="card mb-4 box-shadow shadow" style="width: 100%">
                         <div class="card-body shadow">
                             {% comment %} <li> {% endcomment %}
-                                <a class="card-text" href="{% url 'book_detail' book.id %}">
+                                <a class="card-text" href="{% url 'book_detail' book.id %}" style="text-decoration: none;">
+                                    {% if book.cover %}
+                                        <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="img-fluid rounded mb-2" style="max-height: 200px; object-fit: cover; width: 100%;">
+                                    {% endif %}
                                     <strong class="text-dark"> {{book.title}} </strong>
                                     <p class="card-text text-dark">{{book.autor}}</p>
                                     {% if book.goal %}
