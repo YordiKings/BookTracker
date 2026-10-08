@@ -39,8 +39,8 @@ def books(request):
 
 @login_required
 def dashboard(request):
-    books_created = Book.objects.filter(user=request.user, created__month=datetime.now().month)
-    books_completed = Book.objects.filter(user=request.user, date_completed__month=datetime.now().month)
+    books_created = Book.objects.filter(user=request.user).order_by('-created')
+    books_completed = Book.objects.filter(user=request.user, date_completed__isnull=False).order_by('-date_completed')
     profile = request.user.profile
     return render(request, 'dashboard.html', {'books_created': books_created, 'books_completed': books_completed, 'profile': profile})
 
