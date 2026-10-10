@@ -8,13 +8,15 @@
     </div>
     
     
+    {% regroup books_created by created|date:"F" as created_list %}
+    {% for month in created_list %}
         <div class="d-flex album p-4 m-4 w-100 flex-wrap shadow" style="background:white">
             <div class="d-flex justify-content-left w-100 pl-4">
-                <h2>Agregados en Noviembre.</h2> {% comment %}cambiar a fecha dinamica {% endcomment %}
+                <h2 class="text-capitalize">Agregados en {{ month.grouper }}</h2>
             </div>
             <div class="container-fluid">
                 <div class="row">   
-                    {% for book in books_created %}
+                    {% for book in month.list %}
                     <div class= "col-4">
                         <div class="card my-2" style="width: 100%">
                             <div class="card-body shadow ">
@@ -31,7 +33,6 @@
                                     <p class="text-dark">{{book.progress}}%</p>
                                     <div class= "progress" >
                                         <div style="width: {{book.progress}}%" class="progress-bar" role="progressbar" aria-valuenow="{{book.progress}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        {% comment %} <p class="card-text text-dark">{{book.progress}}%</p> {% endcomment %}
                                     </div>  
                                 </a>
                             </div>
@@ -40,43 +41,44 @@
                     {% endfor %}
                 </div>
             </div>
-    </div>
+        </div>
+    {% endfor %}
 
-
-
-    <div class="d-flex album p-4 m-4 w-100 flex-wrap shadow" style="background:white">
+    {% regroup books_completed by date_completed|date:"F" as completed_list %}
+    {% for month in completed_list %}
+        <div class="d-flex album p-4 m-4 w-100 flex-wrap shadow" style="background:white">
             <div class="d-flex justify-content-left w-100 pl-4">
-                <h2>Terminados en Noviembre</h2> {% comment %}cambiar a fecha dinamica {% endcomment %}
+                <h2 class="text-capitalize">Terminados en {{ month.grouper }}</h2>
             </div>
             <div class="container-fluid">
                 <div class="row">   
-                    {% for book in books_completed %}
+                    {% for book in month.list %}
                     <div class= "col-4">
                         <div class="card my-2" style="width: 100%">
                             <div class="card-body shadow ">    
-                        <a href="{% url 'book_detail' book.id %} class="text-dark"">
-                            <strong class="text-dark"> {{book.title}} </strong>
-                            <p class="text-dark">{{book.autor}}</p>
-                            {% if book.goal %}
-                                <p class="text-dark">Meta: {{book.goal|date:'j/M/Y'}}</p>
-                            {% endif %}
-                            {% if book.date_completed %}
-                                <p class="text-dark">{{ book.date_completed|date:'j/M/Y' }}</p>
-                            {% endif %}
-                            <p class="text-dark">{{book.pages_read}} de {{book.pages_total}}</p>
-                            <p class="text-dark">{{book.progress}}%</p>
-                            <div class= "progress" >
+                                <a href="{% url 'book_detail' book.id %}" class="text-dark">
+                                    <strong class="text-dark"> {{book.title}} </strong>
+                                    <p class="text-dark">{{book.autor}}</p>
+                                    {% if book.goal %}
+                                        <p class="text-dark">Meta: {{book.goal|date:'j/M/Y'}}</p>
+                                    {% endif %}
+                                    {% if book.date_completed %}
+                                        <p class="text-dark">{{ book.date_completed|date:'j/M/Y' }}</p>
+                                    {% endif %}
+                                    <p class="text-dark">{{book.pages_read}} de {{book.pages_total}}</p>
+                                    <p class="text-dark">{{book.progress}}%</p>
+                                    <div class= "progress" >
                                         <div style="width: {{book.progress}}%" class="progress-bar" role="progressbar" aria-valuenow="{{book.progress}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        {% comment %} <p class="card-text text-dark">{{book.progress}}%</p> {% endcomment %}
                                     </div> 
-                        </a>
-                    </div>
-                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
-                    </div>
-                    </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
     <div class=" container-fluid mx-2 mb-5 row w-100 ">
         <div class= "col-8 mr-4 bg-light shadow" style="width=60%">
