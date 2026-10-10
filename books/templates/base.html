@@ -35,6 +35,9 @@
                     <li class="{% if url_name == 'signout' %}active{% endif %} nav-item">
                         <a class="nav-link" href="/logout">Log out</a>
                     </li>
+                    <li class="{% if url_name == 'agile_dashboard' %}active{% endif %} nav-item">
+                        <a class="nav-link" href="/agile-dashboard">Métricas Ágiles</a>
+                    </li>   
                     {% else %}
                     <li class="{% if url_name == 'signup' %}active{% endif %} nav-item">
                         <a class="nav-link" href="/signup">Sign up</a>
@@ -42,6 +45,7 @@
                     <li class="{% if url_name == 'signin' %}active{% endif %} nav-item">
                         <a class="nav-link" href="/signin">Sign in</a>
                     </li>
+                    
                     {% endif %}
 
                 </ul>

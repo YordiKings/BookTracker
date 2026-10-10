@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid p-0 my-3" style="background-color: #FAF8F5; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+    <!-- BANNER SUPERIOR CLARO Y ELEGANTE -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-4 py-3 mb-4 bg-white shadow-sm" style="border-top: 4px solid #DCBD9E; border-bottom: 1px solid #E8E1D7;">
+        <div>
+            <h2 class="m-0 font-weight-bold" style="font-size: 24px; color: #1A202C; letter-spacing: -0.3px;">
+                <i class="fas fa-chart-line mr-2" style="color: #6B1D2F;"></i>BOOKTRACKER 1.0 | Dashboard de métricas SW
+            </h2>
+            <small class="text-muted">Monitoreo dinámico de rendimiento por Sprints</small>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <span class="badge px-3 py-2 font-weight-normal shadow-sm" style="background-color: #F3EFEA; color: #4A5568; font-size: 13px; border: 1px solid #E2D9CD; border-radius: 6px;">
+                <i class="far fa-calendar-alt mr-1"></i> Corte: {{ metrics.as_of_date|default:"09-Oct-2026" }}
+            </span>
+        </div>
+    </div>
+
+    <div class="px-4">
+        <!-- SECCIÓN 1: 6 TARJETAS KPI TOP CON SEMÁFOROS (ESTILO NUTRILINK) -->
+        <div class="row mb-4">
+            <!-- 1. Defect Density -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">Defect Density</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot green mr-2"></span>
+                        <span class="font-weight-bold" style="font-size: 16px; color: #1A202C;">{{ metrics.kpis_summary.defect_density_per_sp }} <small class="text-muted" style="font-size: 11px;">/ SP</small></span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Semáforo densidad</small>
+                </div>
+            </div>
+
+            <!-- 2. Cobertura -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">Cobertura</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot green mr-2"></span>
+                        <span class="font-weight-bold" style="font-size: 16px; color: #1A202C;">{{ metrics.kpis_summary.final_code_coverage_pct }}%</span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Semáforo cobertura</small>
+                </div>
+            </div>
+
+            <!-- 3. CSAT (SCAFFOLDING - SIN DATOS) -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">CSAT</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot gray mr-2"></span>
+                        <span class="font-weight-bold text-secondary" style="font-size: 15px;">N/D</span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Pendiente evaluación</small>
+                </div>
+            </div>
+
+            <!-- 4. Velocidad media -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">Velocidad media</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot green mr-2"></span>
+                        <span class="font-weight-bold" style="font-size: 16px; color: #1A202C;">{{ metrics.kpis_summary.avg_velocity_sp }} <small class="text-muted" style="font-size: 11px;">SP/sp</small></span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Estado velocidad</small>
+                </div>
+            </div>
+
+            <!-- 5. Predictibilidad -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">Predictibilidad</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot green mr-2"></span>
+                        <span class="font-weight-bold" style="font-size: 16px; color: #1A202C;">{{ metrics.kpis_summary.avg_predictability_pct }}%</span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Estado predictibilidad</small>
+                </div>
+            </div>
+
+            <!-- 6. Lead Time -->
+            <div class="col-md-2 col-sm-4 mb-2 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <span class="d-block font-weight-bold mb-2" style="font-size: 13px; color: #4A5568; text-uppercase; letter-spacing: 0.5px;">Lead Time</span>
+                    <div class="d-flex align-items-center justify-content-center p-2 rounded mb-1" style="background-color: #F8FAFC; border: 1px solid #E2E8F0;">
+                        <span class="semaphore-dot green mr-2"></span>
+                        <span class="font-weight-bold" style="font-size: 16px; color: #1A202C;">{{ metrics.kpis_summary.avg_lead_time_days }} <small class="text-muted" style="font-size: 11px;">días</small></span>
+                    </div>
+                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px;">Estado Lead Time</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: CUADRÍCULA 2x3 DE GRÁFICAS (COLOR VINO OSCURO) -->
+        <div class="row">
+            <!-- Gráfica 1: Defect Density -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-bug mr-1" style="color: #6B1D2F;"></i> Defect Density · defectos / SP
+                    </h6>
+                    <div style="height: 200px;">
+                        <canvas id="chartDefectDensity"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfica 2: Cobertura -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-shield-alt mr-1" style="color: #6B1D2F;"></i> Cobertura · % de código ejecutable
+                    </h6>
+                    <div style="height: 200px;">
+                        <canvas id="chartCobertura"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfica 3: CSAT (SCAFFOLDING VISUAL) -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100 d-flex flex-column justify-content-between" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-2" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-smile mr-1" style="color: #6B1D2F;"></i> CSAT · % de respuestas satisfechas
+                    </h6>
+                    <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1" style="background-color: #F8FAFC; border: 2px dashed #CBD5E0; border-radius: 8px; min-height: 170px;">
+                        <i class="fas fa-chart-pie text-muted mb-2" style="font-size: 34px; opacity: 0.5;"></i>
+                        <span class="h4 font-weight-bold text-muted mb-1">N/D</span>
+                        <small class="text-muted text-center px-3" style="font-size: 12px; line-height: 1.4;">
+                            Módulo de satisfacción cliente en preparación para siguientes releases.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfica 4: Velocidad Media -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-running mr-1" style="color: #6B1D2F;"></i> Velocidad media · SP estimados / sprint
+                    </h6>
+                    <div style="height: 200px;">
+                        <canvas id="chartVelocidad"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfica 5: Predictibilidad -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-bullseye mr-1" style="color: #6B1D2F;"></i> Predictibilidad
+                    </h6>
+                    <div style="height: 200px;">
+                        <canvas id="chartPredictibilidad"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfica 6: Lead Time -->
+            <div class="col-md-4 mb-4 px-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100" style="border: 1px solid #E8E1D7;">
+                    <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #6B1D2F;">
+                        <i class="fas fa-clock mr-1" style="color: #6B1D2F;"></i> Lead Time · solicitud a entrega · días
+                    </h6>
+                    <div style="height: 200px;">
+                        <canvas id="chartLeadTime"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ESTILOS ADICIONALES PARA PUNTOS DE SEMÁFORO -->
+<style>
+    .semaphore-dot {
+        height: 14px;
+        width: 14px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    /* Mapeo de botones style.css */
+    .semaphore-dot.green { background-color: #6ee628; border: 1px solid #4eb810; }  /* completeButtonColor */
+    .semaphore-dot.yellow { background-color: #f3e034; border: 1px solid #d4c212; } /* updateButtonColor */
+    .semaphore-dot.red { background-color: #e02626; border: 1px solid #b01515; }    /* deleteButtonColor */
+    .semaphore-dot.gray { background-color: #CBD5E0; }
+</style>
+
+<!-- LIBRERÍA CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<!-- CÓDIGO JS CON PALETA VINO OSCURO -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Carga dinámica de los datos desde la variable del contexto Django
+        const dashboardData = JSON.parse('{{ metrics_json|escapejs }}');
+        const sprints = dashboardData.sprints || [];
+
+        // Extracción de arreglos dinámicos
+        const labels = sprints.map(s => s.sprint_name);
+        const defectDensityData = sprints.map(s => s.defect_density_sp);
+        const coberturaData = sprints.map(s => s.code_coverage_pct);
+        const velocidadData = sprints.map(s => s.completed_sp);
+        const predictibilidadData = sprints.map(s => s.predictability_pct);
+        const leadTimeData = sprints.map(s => s.lead_time_days);
+
+        // Paleta en tono Vino Oscuro / Borgoña
+        const wineColor = '#6B1D2F';                   // Vino Oscuro principal
+        const wineFill = 'rgba(107, 29, 47, 0.18)';    // Variante semitransparente para área
+
+        // Configuración reutilizable para Chart.js
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { font: { size: 11, weight: '500' }, color: '#4A5568' } 
+                },
+                y: { 
+                    grid: { color: '#EDF2F7' }, 
+                    ticks: { font: { size: 11 }, color: '#718096' } 
+                }
+            }
+        };
+
+        // 1. Chart Defect Density (Línea color vino)
+        new Chart(document.getElementById('chartDefectDensity'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: defectDensityData,
+                    borderColor: wineColor,
+                    backgroundColor: wineColor,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    borderWidth: 2.5
+                }]
+            },
+            options: commonOptions
+        });
+
+        // 2. Chart Cobertura (Línea con relleno área vino tenue)
+        new Chart(document.getElementById('chartCobertura'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: coberturaData,
+                    borderColor: wineColor,
+                    backgroundColor: wineFill,
+                    fill: true,
+                    pointRadius: 5,
+                    borderWidth: 2.5,
+                    tension: 0.15
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    ...commonOptions.scales,
+                    y: { ...commonOptions.scales.y, min: 0, max: 100 }
+                }
+            }
+        });
+
+        // 3. Chart Velocidad (Barras color vino)
+        new Chart(document.getElementById('chartVelocidad'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: velocidadData,
+                    backgroundColor: wineColor,
+                    borderRadius: 4
+                }]
+            },
+            options: commonOptions
+        });
+
+        // 4. Chart Predictibilidad (Línea color vino)
+        new Chart(document.getElementById('chartPredictibilidad'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: predictibilidadData,
+                    borderColor: wineColor,
+                    backgroundColor: wineColor,
+                    pointRadius: 5,
+                    borderWidth: 2.5
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    ...commonOptions.scales,
+                    y: { ...commonOptions.scales.y, min: 40, max: 105 }
+                }
+            }
+        });
+
+        // 5. Chart Lead Time (Línea color vino)
+        new Chart(document.getElementById('chartLeadTime'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: leadTimeData,
+                    borderColor: wineColor,
+                    backgroundColor: wineColor,
+                    pointRadius: 5,
+                    borderWidth: 2.5
+                }]
+            },
+            options: commonOptions
+        });
+    });
+</script>
+
+{% endblock %}
