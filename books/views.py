@@ -10,7 +10,11 @@ from .forms import SignUpForm
 from .forms import SignInForm
 from .models import Book, Profile
 from datetime import datetime
-
+import requests
+from django.core.files.base import ContentFile
+import json
+import os
+from django.conf import settings
 
 # Create your views here.
 
@@ -44,8 +48,7 @@ def dashboard(request):
     profile = request.user.profile
     return render(request, 'dashboard.html', {'books_created': books_created, 'books_completed': books_completed, 'profile': profile})
 
-import requests
-from django.core.files.base import ContentFile
+
 
 @login_required
 def create_book(request):
@@ -192,3 +195,21 @@ def signin(request):
             return redirect('books')
 
 
+@login_required
+def agile_dashboard(request):
+    # Ruta hacia el archivo JSON de métricas
+    json_path = os.path.join(settings.BASE_DIR, "books", "data", "metrics.json")
+
+    # Carga de datos dinámicos
+    if os.path.exists(json_path):
+        with open(json_path, "r", encoding="utf-8") as f:
+            metrics_data = json.load(f)
+    else:
+        # Fallback en caso de no encontrar el archivo
+        metrics_data = {"sprints": [], "kpis_summary": {}}
+
+    context = {
+        "metrics": metrics_data,
+        "metrics_json": json.dumps(metrics_data),
+    }
+    return render(request, "agile_dashboard.html", context)
